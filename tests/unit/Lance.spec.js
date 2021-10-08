@@ -87,7 +87,9 @@ describe('um lance com valor mínimo', () => {
     // garante que o DOM tenha sido atualizado
     await wrapper.vm.$nextTick();
 
-    const mensagemErro = wrapper.find('p.alert').element;
-    expect(mensagemErro).toBeTruthy();
+    const mensagemErro = wrapper.find('p.alert').element.textContent;
+    const mensagemEsperada = 'O valor mínimo para o lance é de R$ 300';
+
+    expect(mensagemErro).toContain(mensagemEsperada);
   });
 });
