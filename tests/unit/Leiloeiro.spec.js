@@ -1,6 +1,7 @@
 import Leiloeiro from '@/views/Leiloeiro.vue';
 import { mount } from '@vue/test-utils';
 import { getLeilao, getLances } from '@/http';
+import flushPromises from 'flush-promises';
 
 jest.mock('@/http');
 
@@ -11,22 +12,18 @@ const leilao = {
 };
 
 describe('leiloeiro inicia um leilão que não possui lances', () => {
-  test('avisa quando não existem lances', () => {
+  test('avisa quando não existem lances', async () => {
     getLeilao.mockResolvedValueOnce(leilao);
-    getLances.mockResolvedValueOnce([
-      {
-        id: 1,
-        valor: 100,
-        data: '2020-12-01',
-        leilao_id: 1
-      }
-    ]);
+    getLances.mockResolvedValueOnce([]);
 
     const wrapper = mount(Leiloeiro, {
       propsData: {
         id: 1
       }
     });
+
+    await flushPromises();
+
     const alerta = wrapper.find('.alert-dark');
 
     expect(alerta.exists()).toBeTruthy();
